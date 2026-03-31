@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>48.8575° N, 2.3514° E</title>
+  <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Bebas+Neue&family=Bodoni+Moda:ital,wght@0,400;0,500;1,400&family=Boogaloo&family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Crimson+Pro:wght@400;500&family=Courier+Prime:wght@400;700&family=DM+Serif+Display:ital@0;1&family=Didact+Gothic&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Exo+2:ital,wght@0,300;0,400;0,500;1,300&family=Fredoka:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=Inconsolata:wght@400;500&family=Josefin+Sans:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&family=Lato:wght@400;700&family=Libre+Baskerville:wght@400;700&family=Lora:ital,wght@0,400;1,400&family=Marcellus&family=Nunito:wght@400;600&family=Oswald:wght@400;500;700&family=Permanent+Marker&family=Playfair+Display+SC:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Raleway:ital,wght@0,300;0,400;1,300&family=Righteous&family=Rock+Salt&family=Source+Sans+3:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Space+Grotesk:wght@400;500&family=Space+Mono:ital,wght@0,400;1,400&family=Special+Elite&family=Teko:wght@400;500&family=Unbounded:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ── LOADER ─────────────────────────────────────── -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-globe" aria-label="Loading"></div>
+</div>
+
+<!-- ── HEADER ─────────────────────────────────────── -->
+<header>
+  <div class="hl">
+    <h1>48.8575° N, 2.3514° E<span class="title-dot"></span></h1>
+    <p class="sub">25 moments &nbsp;·&nbsp; 10 decades &nbsp;·&nbsp; one element</p>
+  </div>
+  <div class="header-actions">
+    <div class="view-toggle" aria-label="View switcher">
+      <span class="view-pill is-active">&#9678;&nbsp; map</span>
+      <a class="view-pill" href="timeline.html?view=tl">&#9776;&nbsp; linear</a>
+    </div>
+    <button class="info-btn" id="itog">about ↗</button>
+  </div>
+</header>
+
+<!-- ── VOGUE COLLAGE WATERMARK ─────────────────────── -->
+<!-- Top half of viewport -->
+<div class="fashion-deco deco-top" aria-hidden="true">
+  <img src="vogue-collage.jpg" alt="">
+</div>
+<!-- Bottom half of viewport -->
+<div class="fashion-deco deco-bottom" aria-hidden="true">
+  <img src="vogue-collage.jpg" alt="">
+</div>
+
+<!-- ── GLOBE ───────────────────────────────────────── -->
+<div id="gw">
+  <canvas id="globe" width="700" height="700"></canvas>
+  <div class="hint" id="hint">drag to spin &nbsp;·&nbsp; scroll to zoom &nbsp;·&nbsp; hover/click grouped cities &nbsp;·&nbsp; click a pin</div>
+</div>
+
+<!-- ── ZOOM CONTROLS (fixed, outside #gw) ─────────── -->
+<div class="zoom-controls" aria-label="Globe zoom controls">
+  <button class="zoom-btn" id="zoomOut" aria-label="Zoom out">−</button>
+  <button class="zoom-btn" id="zoomIn" aria-label="Zoom in">+</button>
+</div>
+
+<!-- ── PANEL ──────────────────────────────────────── -->
+<div id="panel" aria-hidden="true">
+  <div class="panel-inner" id="panelInner" role="dialog" aria-modal="true" aria-label="Fashion moment">
+    <div class="fold-shell" aria-hidden="true">
+      <div class="fold fold-left"></div>
+      <div class="fold fold-center"></div>
+      <div class="fold fold-right"></div>
+    </div>
+
+    <div class="panel-body">
+      <button class="pcls" id="pcls" aria-label="Close">✕</button>
+
+      <div class="map-area">
+        <canvas id="mmap"></canvas>
+      </div>
+
+      <div class="pcont">
+        <div class="p-inst" id="pinst"></div>
+        <h2 class="p-title" id="ptitle"></h2>
+        <p class="p-text" id="ptext"></p>
+        <div class="p-div"></div>
+
+        <div class="sections">
+          <div class="section">
+            <h3 id="psecATitle">Section A</h3>
+            <p id="psecA"></p>
+          </div>
+          <div class="section">
+            <h3 id="psecBTitle">Section B</h3>
+            <p id="psecB"></p>
+          </div>
+        </div>
+
+        <div class="p-ph">
+          <div class="p-ph-label" id="pphLabel">Button History</div>
+          <div class="p-ph-copy" id="pph"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="ov" aria-hidden="true"></div>
+
+<!-- ── MOMENT DATA ────────────────────────────────── -->
+<section id="moment-source" hidden aria-hidden="true">
+  <button type="button" class="moment-node" data-id="1" data-title="The Harem Pant" data-dec="1920s" data-city="Paris" data-lat="48.85" data-lon="2.35" data-bs="pearl">Moment 01</button>
+  <button type="button" class="moment-node" data-id="2" data-title="The Bias Cut" data-dec="1920s" data-city="Paris" data-lat="48.91" data-lon="2.26" data-bs="pearl">Moment 02</button>
+  <button type="button" class="moment-node" data-id="3" data-title="Cabaret Dressing" data-dec="1920s" data-city="Berlin" data-lat="52.52" data-lon="13.40" data-bs="pearl">Moment 03</button>
+  <button type="button" class="moment-node" data-id="4" data-title="The Little Black Dress" data-dec="1930s" data-city="Paris" data-lat="48.81" data-lon="2.22" data-bs="horn">Moment 04</button>
+  <button type="button" class="moment-node" data-id="5" data-title="The Shoulder Pad" data-dec="1930s" data-city="Hollywood" data-lat="34.09" data-lon="-118.32" data-bs="horn">Moment 05</button>
+  <button type="button" class="moment-node" data-id="6" data-title="Utility Clothing" data-dec="1940s" data-city="London" data-lat="51.51" data-lon="-0.12" data-bs="fabric">Moment 06</button>
+  <button type="button" class="moment-node" data-id="7" data-title="The New Look" data-dec="1940s" data-city="Paris" data-lat="48.89" data-lon="2.45" data-bs="fabric">Moment 07</button>
+  <button type="button" class="moment-node" data-id="8" data-title="The Nylon Riot" data-dec="1940s" data-city="New York" data-lat="40.73" data-lon="-73.99" data-bs="fabric">Moment 08</button>
+  <button type="button" class="moment-node" data-id="9" data-title="American Sportswear" data-dec="1940s" data-city="New York" data-lat="40.77" data-lon="-73.96" data-bs="fabric">Moment 09</button>
+  <button type="button" class="moment-node" data-id="10" data-title="La Dolce Vita" data-dec="1950s" data-city="Rome" data-lat="41.90" data-lon="12.50" data-bs="metal">Moment 10</button>
+  <button type="button" class="moment-node" data-id="11" data-title="Denim Goes Rebellious" data-dec="1950s" data-city="Hollywood" data-lat="34.05" data-lon="-118.45" data-bs="metal">Moment 11</button>
+  <button type="button" class="moment-node" data-id="12" data-title="The Silhouette Wars" data-dec="1950s" data-city="Paris" data-lat="48.79" data-lon="2.31" data-bs="metal">Moment 12</button>
+  <button type="button" class="moment-node" data-id="13" data-title="The Miniskirt" data-dec="1960s" data-city="London" data-lat="51.49" data-lon="-0.20" data-bs="pmod">Moment 13</button>
+  <button type="button" class="moment-node" data-id="14" data-title="Le Smoking" data-dec="1960s" data-city="Paris" data-lat="48.86" data-lon="2.32" data-bs="pmod">Moment 14</button>
+  <button type="button" class="moment-node" data-id="15" data-title="Studio 54" data-dec="1970s" data-city="New York" data-lat="40.76" data-lon="-74.00" data-bs="pgrv">Moment 15</button>
+  <button type="button" class="moment-node" data-id="16" data-title="Punk" data-dec="1970s" data-city="London" data-lat="51.48" data-lon="-0.17" data-bs="pgrv">Moment 16</button>
+  <button type="button" class="moment-node" data-id="17" data-title="Dapper Dan" data-dec="1980s" data-city="New York" data-lat="40.80" data-lon="-73.95" data-bs="neon">Moment 17</button>
+  <button type="button" class="moment-node" data-id="18" data-title="The Unstructured Suit" data-dec="1980s" data-city="Milan" data-lat="45.46" data-lon="9.19" data-bs="neon">Moment 18</button>
+  <button type="button" class="moment-node" data-id="19" data-title="The Grunge Collection" data-dec="1990s" data-city="New York" data-lat="40.74" data-lon="-74.02" data-bs="skeu">Moment 19</button>
+  <button type="button" class="moment-node" data-id="20" data-title="Heroin Chic" data-dec="1990s" data-city="London" data-lat="51.52" data-lon="-0.07" data-bs="skeu">Moment 20</button>
+  <button type="button" class="moment-node" data-id="21" data-title="McQueen's Highland Rape" data-dec="1990s" data-city="Antwerp" data-lat="51.22" data-lon="4.40" data-bs="skeu">Moment 21</button>
+  <button type="button" class="moment-node" data-id="22" data-title="Harajuku" data-dec="2000s" data-city="Tokyo" data-lat="35.66" data-lon="139.70" data-bs="web2">Moment 22</button>
+  <button type="button" class="moment-node" data-id="23" data-title="Logo Mania" data-dec="2000s" data-city="Paris" data-lat="48.84" data-lon="2.38" data-bs="web2">Moment 23</button>
+  <button type="button" class="moment-node" data-id="24" data-title="Off-White" data-dec="2010s" data-city="New York" data-lat="40.72" data-lon="-74.01" data-bs="flat">Moment 24</button>
+  <button type="button" class="moment-node" data-id="25" data-title="The Spray-On Dress" data-dec="2020s" data-city="Paris" data-lat="48.88" data-lon="2.34" data-bs="brut">Moment 25</button>
+</section>
+
+<!-- ── INFO OVERLAY ───────────────────────────────── -->
+<div id="info">
+  <button class="info-close" id="infoClose" aria-label="Close about">✕</button>
+  <div class="ig">
+    <div class="ic">
+      <h3>The Element</h3>
+      <p><code>&lt;button&gt;</code> was introduced in HTML 2.0 in 1995 — but buttons as physical objects predate the internet by centuries. A button on a garment and a button on a screen share the same name, the same purpose: <em>press me, something happens.</em></p>
+      <p>25 <code>&lt;button&gt;</code> elements, placed on a globe as pins. Each styled to look like a button from its era — pearl in the 1920s, neon in the 80s, flat in the 2010s — mirroring how interface design evolved alongside fashion.</p>
+    </div>
+    <div class="ic">
+      <h3>The Concept</h3>
+      <p>Fashion history is geography. The capital of style never stayed in one place — it migrated from Paris to London to New York to Tokyo to Seoul to everywhere and nowhere at once.</p>
+      <p>Spin the globe. Find a button. Press it. Something happens.</p>
+    </div>
+  </div>
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script defer src="script.js"></script>
+
+<!-- Deco fade-in + panel-open body class patch -->
+<script>
+  // Fade in decos after a short delay
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      document.querySelectorAll('.fashion-deco').forEach(function(el) {
+        el.classList.add('visible');
+      });
+    }, 600);
+
+    // Watch for panel open/close to toggle body class for deco hiding
+    var panel = document.getElementById('panel');
+    if (!panel) return;
+    var observer = new MutationObserver(function() {
+      if (panel.classList.contains('open')) {
+        document.body.classList.add('panel-open');
+      } else if (!panel.classList.contains('closing')) {
+        document.body.classList.remove('panel-open');
+      }
+    });
+    observer.observe(panel, { attributes: true, attributeFilter: ['class'] });
+  });
+</script>
+</body>
+</html>
