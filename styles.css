@@ -361,9 +361,9 @@ body.panel-open .fashion-deco {
 ───────────────────────────────────────────────────────────────────────────── */
 #panel {
   position: fixed;
-  top: calc(var(--panel-inset) + var(--panel-top-offset) + 18px);
+  top: var(--header-height);
   right: var(--panel-right-gap);
-  bottom: calc(var(--panel-inset) - var(--panel-top-offset) - 25px);
+  bottom: auto;
   width: min(50vw, 720px);
   z-index: 50;
   pointer-events: none;
@@ -724,15 +724,19 @@ body.panel-open .fashion-deco {
 
   #gw {
     position: relative;
-    height: min(68vw, 520px);
+    height: min(80vw, 620px);
     width: 100%;
-    padding-top: calc(var(--header-height) + 28px);
-    padding-bottom: 48px;
+    padding-top: 150px;
+    padding-bottom: 24px;
     inset: auto;
     display: flex;
     align-items: center;
     justify-content: center;
     transform: none !important;
+  }
+  #globe {
+    margin-top: 56px;
+    margin-bottom: 92px;
   }
   #gw.shifted { transform: none !important; }
 
@@ -740,12 +744,10 @@ body.panel-open .fashion-deco {
   .deco-top.visible    { opacity: 0.09; }
   .deco-bottom.visible { opacity: 0.07; }
 
-  .hint { bottom: 10px; white-space: normal; text-align: center; width: min(90%, 760px); }
-
   #panel {
     position: relative;
     top: auto; right: auto; bottom: auto; left: auto;
-    margin-top: 0;
+    margin-top: 24px;
     width: 100% !important;
     height: auto; max-height: none; overflow: visible;
     pointer-events: auto;
@@ -778,7 +780,11 @@ body.panel-open .fashion-deco {
 @media (min-width: 641px) and (max-width: 1024px) {
   :root { --page-gutter: 24px; --header-height: 78px; }
   body { min-width: 600px; }
-  #gw { height: min(72vw, 480px); }
+  #gw { height: min(84vw, 600px); }
+  #globe {
+    margin-top: 44px;
+    margin-bottom: 78px;
+  }
   .map-area { height: clamp(180px, 36vw, 300px); }
   .deco-top.visible    { opacity: 0.08; }
   .deco-bottom.visible { opacity: 0.06; }
@@ -804,9 +810,13 @@ body.panel-open .fashion-deco {
   .header-actions { gap: 5px; }
 
   #gw {
-    height: min(100vw, 380px);
-    padding-top: calc(var(--header-height) + 4px);
-    padding-bottom: 14px;
+    height: min(100vw, 440px);
+    padding-top: calc(var(--header-height) + 12px);
+    padding-bottom: 20px;
+  }
+  #globe {
+    margin-top: 30px;
+    margin-bottom: 52px;
   }
 
   /* Hide collage watermark on mobile for clean reading */

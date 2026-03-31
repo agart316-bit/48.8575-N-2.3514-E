@@ -707,8 +707,8 @@ function isMobile() {
 function targetGlobeSize() {
   if (isStackedLayout()) {
     const containerH = document.getElementById("gw")?.offsetHeight || window.innerHeight * 0.58;
-    const maxSize = isMobile() ? 360 : 560;
-    const widthScale = isMobile() ? 0.82 : 0.76;
+    const maxSize = isMobile() ? 380 : 600;
+    const widthScale = isMobile() ? 0.86 : 0.8;
     return Math.min(window.innerWidth * widthScale, containerH * 0.9, maxSize);
   }
   return Math.min(window.innerWidth * 0.82, window.innerHeight * 0.78, 700);
@@ -717,6 +717,29 @@ function targetGlobeSize() {
 function zoomFrameSize() {
   // Always render at full canvas size — no zoom clipping
   return W;
+}
+
+function syncPanelHeightToFrame() {
+  if (!els.panel) return;
+
+  // In stacked layout, let CSS control panel height naturally.
+  if (isStackedLayout()) {
+    els.panel.style.removeProperty("top");
+    els.panel.style.removeProperty("height");
+    return;
+  }
+
+  const frameSize = Math.round(zoomFrameSize());
+  const canvasRect = cv.getBoundingClientRect();
+  const frameInset = Math.round((W - frameSize) / 2);
+  const frameTop = Math.round(canvasRect.top + frameInset);
+
+  if (Number.isFinite(frameTop)) {
+    els.panel.style.top = `${frameTop}px`;
+  }
+  if (frameSize > 0) {
+    els.panel.style.height = `${frameSize}px`;
+  }
 }
 
 function resizeGlobe() {
@@ -746,6 +769,7 @@ function resizeGlobe() {
     .rotate(rotate);
 
   path = d3.geoPath(projection, ctx);
+  syncPanelHeightToFrame();
   draw();
 }
 
@@ -753,6 +777,7 @@ function setZoom(nextZoom) {
   zoomLevel = clamp(nextZoom, ZOOM_MIN, ZOOM_MAX);
   R = baseR * zoomLevel;
   if (projection) projection.scale(R);
+  syncPanelHeightToFrame();
   draw();
 }
 
