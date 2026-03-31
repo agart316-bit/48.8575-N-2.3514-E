@@ -811,11 +811,11 @@ body.panel-open .fashion-deco {
 
   #gw {
     height: min(100vw, 440px);
-    padding-top: calc(var(--header-height) + 12px);
-    padding-bottom: 20px;
+    padding-top: calc(var(--header-height) + env(safe-area-inset-top, 0px) + 60px);
+    padding-bottom: 24px;
   }
   #globe {
-    margin-top: 30px;
+    margin-top: 68px;
     margin-bottom: 52px;
   }
 
