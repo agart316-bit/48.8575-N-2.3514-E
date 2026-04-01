@@ -148,7 +148,8 @@ function updateHeader(index) {
 
   if (meta.bg) document.body.style.backgroundColor = meta.bg;
   cdec.textContent = meta.dec;
-  if (meta.sa) cdec.style.color = meta.sa;
+  if (meta.id === 17) cdec.style.color = '#000000';
+  else if (meta.sa) cdec.style.color = meta.sa;
   ctr.textContent = `${String(meta.id).padStart(2, '0')} / ${String(totalCards).padStart(2, '0')}`;
   prog.style.width = `${clamp(pct, 0, 1) * 100}%`;
   if (meta.sa) prog.style.background = meta.sa;

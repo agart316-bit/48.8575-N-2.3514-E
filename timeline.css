@@ -75,6 +75,7 @@ body {
 .sub {
   font-family: var(--ui-font);
   font-size: clamp(10px, 0.8vw, 13px);
+  font-weight: 700;
   font-style: normal;
   letter-spacing: 0.14em;
   color: var(--ui-muted);
@@ -100,7 +101,7 @@ body {
   white-space: nowrap;
   font-family: var(--ui-font);
   font-size: 10px;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ui-muted);
@@ -123,7 +124,7 @@ body {
   background: transparent;
   border: 1px solid rgba(26,20,16,0.2);
   font-family: var(--ui-font); font-size: 10px;
-  font-weight: 400;
+  font-weight: 700;
   letter-spacing: 0.12em; padding: 7px 14px; cursor: pointer;
   color: #1A1410; text-transform: uppercase; line-height: 1;
   transition: background .2s, border-color .2s, color .2s;
@@ -149,6 +150,7 @@ body {
 .era-item {
   flex: 1; display: flex; align-items: center; justify-content: center;
   font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+  font-weight: 700;
   color: rgba(26,20,16,.6); cursor: pointer;
   padding: 0 4px; height: var(--era-strip-h);
   position: relative; transition: color .3s;
@@ -191,6 +193,7 @@ body {
 #ctr-badge.v { opacity: 1; }
 #cdec {
   font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+  font-weight: 700;
   color: var(--ui-gold); transition: color .7s;
 }
 #ctr {
@@ -213,7 +216,7 @@ body {
   padding: 0;
 }
 .dnl {
-  font-size: 11px; letter-spacing: .15em;
+  font-size: 11px; font-weight: 700; letter-spacing: .15em;
   color: rgba(240,235,227,.28);
   opacity: 0; transform: translateX(6px);
   transition: opacity .2s, transform .2s, color .3s;
@@ -278,7 +281,7 @@ body {
   opacity: 0; animation: fu .9s .5s var(--ease-expo) forwards;
 }
 .h-sub {
-  font-size: 11px; letter-spacing: .18em; color: var(--ui-muted);
+  font-size: 11px; font-weight: 700; letter-spacing: .18em; color: var(--ui-muted);
   opacity: 0; animation: fu .8s .75s var(--ease-expo) forwards;
   max-width: 720px;
 }
@@ -633,6 +636,7 @@ section.m.in .mnode::before {
 .mtag {
   font-family: var(--m-accent-font), "Cormorant Garamond", serif;
   font-size: 15px;
+  font-weight: 700;
   font-style: italic;
   letter-spacing: .1em;
   text-transform: none;
@@ -713,7 +717,7 @@ section.m.in .mnum { opacity: .065; }
 
 .mdec {
   font-family: var(--m-body-font), "Jost", sans-serif;
-  font-size: 15px; letter-spacing: .18em; text-transform: uppercase;
+  font-size: 15px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase;
   color: var(--muted); opacity: 0; transform: translateX(14px);
   transition: opacity .5s .3s, transform .5s .3s var(--ease-expo);
 }
@@ -752,6 +756,7 @@ section.m.in .mbutton-wrap { opacity: 1; transform: translateY(0); }
 .mbtn {
   cursor: pointer;
   font-family: inherit;
+  font-weight: 700;
   transition: all .18s ease;
   white-space: nowrap;
 }
@@ -917,6 +922,23 @@ section.m.in .mbutton-wrap { opacity: 1; transform: translateY(0); }
 .mbtn.bs-web2:hover { box-shadow: 0 1px 0 rgba(255,255,255,.4) inset, 0 5px 16px rgba(192,48,112,.55); transform: translateY(-1px); }
 .mbtn.bs-web2:active { transform: translateY(1px); box-shadow: 0 1px 3px rgba(192,48,112,.3) inset; }
 
+/* moment 23: logo mania uses section text yellow */
+section.m[data-id="23"] .mbtn.bs-web2 {
+  background: var(--st);
+  border-color: var(--st);
+  color: #3D2B1F;
+  text-shadow: none;
+  box-shadow: 0 1px 0 rgba(255,255,255,.28) inset, 0 3px 8px rgba(0,0,0,.28);
+}
+section.m[data-id="23"] .mbtn.bs-web2:hover {
+  filter: brightness(1.04);
+  box-shadow: 0 1px 0 rgba(255,255,255,.28) inset, 0 5px 16px rgba(0,0,0,.34);
+}
+section.m[data-id="23"] .mbtn.bs-web2:active {
+  filter: brightness(.96);
+  box-shadow: 0 1px 3px rgba(0,0,0,.24) inset;
+}
+
 /* flat — 2010s: no depth, ghost border */
 .mbtn.bs-flat {
   background: transparent;
@@ -1077,7 +1099,7 @@ section.m.in .mvis { opacity: 1; transform: scale(1) rotate(0); }
 .info-close {
   position: absolute; right: 20px; top: 16px;
   background: none; border: none; color: #f0ebe3;
-  font-size: 16px; cursor: pointer; opacity: .55;
+  font-size: 16px; font-weight: 700; cursor: pointer; opacity: .55;
   transition: opacity .2s;
   font-family: var(--ui-font);
 }
