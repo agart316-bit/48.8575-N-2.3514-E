@@ -286,8 +286,8 @@ body {
   max-width: 720px;
 }
 .scue {
-  position: absolute; bottom: 20px; left: 50%;
-  transform: translateX(-50%);
+  position: static;
+  margin-top: 8px;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   opacity: 0; animation: fi 1s 1.3s forwards;
 }
@@ -1171,7 +1171,7 @@ section.m.in .mvis { opacity: 1; transform: scale(1) rotate(0); }
 }
 
 @media (max-width: 640px) {
-  :root { --page-gutter: 16px; --header-height: 62px; }
+  :root { --page-gutter: 16px; --header-height: 89px; }
   #dnav { display: none; }
   #era-strip { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   #era-inner { min-width: 560px; }
@@ -1181,13 +1181,56 @@ section.m.in .mvis { opacity: 1; transform: scale(1) rotate(0); }
     background: rgba(247,243,236,0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    align-items: flex-start;
+    gap: 8px;
   }
-  .view-pill  { padding: 6px 10px; font-size: 9px; }
-  .info-btn   { padding: 6px 10px; font-size: 9px; }
-  #tb h1      { font-size: clamp(24px, 7.2vw, 34px); }
-  .sub        { font-size: 10px; }
-  .header-actions { gap: 5px; }
-
+  .hl {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  #tb h1 {
+    font-size: clamp(18px, 6.4vw, 30px);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-align: left;
+    margin-top: 12px;
+  }
+  .sub {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+    text-align: left;
+  }
+  .header-actions {
+    margin-top: 0;
+    gap: 4px;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: clamp(92px, 26vw, 120px);
+  }
+  .view-toggle {
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    border: 0;
+  }
+  .view-pill {
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 8px;
+    border: 1px solid rgba(26,20,16,0.2);
+  }
+  .view-pill + .view-pill {
+    border-left: 1px solid rgba(26,20,16,0.2);
+    margin-top: -1px;
+  }
+  .info-btn {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 8px;
+    text-align: center;
+  }
   #hero { min-height: 44vh; gap: 14px; padding: 30px 20px 64px; }
   .h-ttl { font-size: clamp(48px,16vw,92px); }
   .h-eye { font-size: 9px; }

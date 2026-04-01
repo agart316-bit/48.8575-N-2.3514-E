@@ -1269,11 +1269,9 @@ function setPanelOpen(open) {
     els.panel.classList.add("open");
     els.panel.setAttribute("aria-hidden", "false");
     if (!isStackedLayout()) els.gw.classList.add("shifted");
-    // In stacked layout, scroll the panel into view smoothly.
+    // In stacked layout, keep the viewport anchored at the top.
     if (isStackedLayout()) {
-      window.setTimeout(() => {
-        els.panel.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 80);
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     }
   } else {
     els.panel.classList.add("closing");
