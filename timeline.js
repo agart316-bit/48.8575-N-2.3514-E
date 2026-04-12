@@ -62,6 +62,45 @@ function setPhotoOrientation(img) {
   else img.addEventListener('load', () => setPhotoOrientation(img), { once: true });
 });
 
+function escapeSvgText(text) {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buttonLabelImageSrc(label, color) {
+  const content = label.toUpperCase();
+  const width = Math.max(74, content.length * 18);
+  const svg = `
+<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="22" viewBox="0 0 ${width} 22">
+  <text x="50%" y="15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="700" letter-spacing="1" fill="${color}">${escapeSvgText(content)}</text>
+</svg>`.trim();
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function convertLinearButtonLabelsToImages() {
+  document.querySelectorAll('.mbtn').forEach(button => {
+    const label = button.textContent.trim();
+    if (!label) return;
+
+    const color = getComputedStyle(button).color || '#1A1410';
+    const img = document.createElement('img');
+    img.className = 'mbtn-label-img';
+    img.alt = '';
+    img.setAttribute('aria-hidden', 'true');
+    img.src = buttonLabelImageSrc(label, color);
+
+    button.textContent = '';
+    button.appendChild(img);
+    button.classList.add('has-label-image');
+  });
+}
+
+convertLinearButtonLabelsToImages();
+
 decadeList.forEach(d => {
   const btn = document.createElement('button');
   btn.className = 'era-item';
@@ -112,16 +151,19 @@ function clamp(v, mn, mx) { return Math.max(mn, Math.min(mx, v)); }
 
 function scrollToMoment(index) {
   const i = clamp(index, 0, totalCards - 1);
-  cards[i]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const card = cards[i];
+  if (!card) return;
+  const x = Math.max(0, card.getBoundingClientRect().left + window.scrollX);
+  window.scrollTo({ left: x, behavior: 'smooth' });
 }
 
 function cardFromViewport() {
-  const center = window.innerHeight * .5;
+  const center = window.innerWidth * .5;
   let best = 0;
   let dist = Infinity;
   cards.forEach((card, index) => {
     const r = card.getBoundingClientRect();
-    const d = Math.abs(r.top + r.height * .5 - center);
+    const d = Math.abs(r.left + r.width * .5 - center);
     if (d < dist) {
       dist = d;
       best = index;
@@ -144,7 +186,7 @@ function updateHeader(index) {
 
   const meta = getCardMeta(card, index);
   const d = document.documentElement;
-  const pct = window.scrollY / Math.max(1, d.scrollHeight - window.innerHeight);
+  const pct = window.scrollX / Math.max(1, d.scrollWidth - window.innerWidth);
 
   if (meta.bg) document.body.style.backgroundColor = meta.bg;
   cdec.textContent = meta.dec;
@@ -826,6 +868,14 @@ window.addEventListener('touchend', () => {
 window.addEventListener('touchcancel', () => {
   endGalleryDrag();
 });
+
+window.addEventListener('wheel', e => {
+  if (galleryModal?.classList.contains('open')) return;
+  if (e.ctrlKey) return;
+  if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+  e.preventDefault();
+  window.scrollBy({ left: e.deltaY, top: 0, behavior: 'auto' });
+}, { passive: false });
 
 window.addEventListener('scroll', queueRender, { passive: true });
 window.addEventListener('resize', () => {

@@ -287,6 +287,22 @@ const momentContent = [
   },
 ];
 
+const CITY_COUNTRY_BY_CITY = Object.freeze({
+  paris: "France",
+  berlin: "Germany",
+  hollywood: "United States",
+  london: "United Kingdom",
+  "new york": "United States",
+  rome: "Italy",
+  milan: "Italy",
+  antwerp: "Belgium",
+  tokyo: "Japan",
+});
+
+function countryFromCity(city) {
+  return CITY_COUNTRY_BY_CITY[(city || "").toLowerCase()] || "Unknown";
+}
+
 function readMomentNodes() {
   const nodes = [...document.querySelectorAll("#moment-source .moment-node")];
   const nodeMap = new Map();
@@ -300,6 +316,7 @@ function readMomentNodes() {
       title: node.dataset.title || "",
       dec: node.dataset.dec || "",
       city: node.dataset.city || "",
+      country: node.dataset.country || "",
       bs: node.dataset.bs || "",
       lat,
       lon,
@@ -319,6 +336,7 @@ const moments = momentContent.map((moment) => {
     title: node.title || moment.title,
     dec: node.dec || moment.dec,
     city: node.city || moment.city,
+    country: node.country || countryFromCity(node.city || moment.city),
     bs: node.bs || moment.bs,
     lat: node.lat,
     lon: node.lon,
@@ -513,6 +531,10 @@ const els = {
   panel: document.getElementById("panel"),
   panelInner: document.getElementById("panelInner"),
   close: document.getElementById("pcls"),
+  panelBack: document.getElementById("panelBack"),
+  panelNext: document.getElementById("panelNext"),
+  panelNav: document.querySelector(".panel-nav"),
+  panelBody: document.querySelector("#panel .panel-body"),
   gw: document.getElementById("gw"),
   info: document.getElementById("info"),
   infoClose: document.getElementById("infoClose"),
@@ -946,8 +968,35 @@ function getVisiblePins() {
   return pins;
 }
 
+function drawPinCityLabel(pin) {
+  if (!pin || !pin.m || !pin.m.city) return;
+  const style = BS[pin.m.bs];
+  const scale = 0.55 + pin.depth * 0.6;
+  const radius = style.r * scale * (hov === pin.m.id ? 1.4 : 1);
+  const label = pin.m.city;
+
+  ctx.save();
+  ctx.font = '700 9px "ITC Avant Garde Gothic Std", "Century Gothic", "Helvetica Neue", Arial, sans-serif';
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  const textWidth = ctx.measureText(label).width;
+  const boxWidth = textWidth + 12;
+  const boxHeight = 18;
+  const x = pin.x;
+  const y = pin.y - radius - 16;
+
+  ctx.fillStyle = "rgba(12,10,8,0.78)";
+  ctx.fillRect(x - boxWidth / 2, y - boxHeight / 2, boxWidth, boxHeight);
+
+  ctx.fillStyle = "rgba(247,243,236,0.94)";
+  ctx.fillText(label, x, y + 0.5);
+  ctx.restore();
+}
+
 function drawPins() {
   const pins = getVisiblePins().sort((a, b) => a.depth - b.depth);
+  let hoveredPin = null;
 
   for (const pin of pins) {
     if (!pin.spider) continue;
@@ -965,6 +1014,7 @@ function drawPins() {
     const m = pin.m;
     const s = BS[m.bs];
     const isHover = hov === m.id;
+    if (isHover) hoveredPin = pin;
 
     const sc = 0.55 + pin.depth * 0.6;
     const br = s.r * sc * (isHover ? 1.4 : 1);
@@ -1044,6 +1094,8 @@ function drawPins() {
 
     ctx.restore();
   }
+
+  drawPinCityLabel(hoveredPin);
 }
 
 function drawLoadingLabel(label) {
@@ -1290,6 +1342,9 @@ function openPanel(m) {
   pOpen = true;
   spin = false;
   applyPanelTheme(m);
+  if (els.panelBody) {
+    els.panelBody.scrollTop = 0;
+  }
 
   els.pinst.textContent = `${m.dec} · ${m.city}`;
   els.ptitle.textContent = m.id === 24 ? `"${m.title}"` : m.title;
@@ -1312,16 +1367,35 @@ function openPanel(m) {
     }, 1620);
   }
   spinTo(m);
+  updatePanelNavVisibility();
+}
+
+function selectedMomentIndex() {
+  if (!selected) return -1;
+  return moments.findIndex((moment) => moment.id === selected.id);
+}
+
+function openRelativePanel(step) {
+  if (!moments.length) return;
+  const currentIndex = selectedMomentIndex();
+  const safeIndex = currentIndex >= 0 ? currentIndex : 0;
+  const nextIndex = (safeIndex + step + moments.length) % moments.length;
+  openPanel(moments[nextIndex]);
 }
 
 function closePanel() {
   pOpen = false;
   setPanelOpen(false);
   selected = null;
+  if (els.panelNav) {
+    els.panelNav.classList.remove("is-visible");
+  }
   draw();
 }
 
 els.close.addEventListener("click", closePanel);
+els.panelBack?.addEventListener("click", () => openRelativePanel(-1));
+els.panelNext?.addEventListener("click", () => openRelativePanel(1));
 
 function closeInfo() {
   els.info.classList.remove("open");
@@ -1345,6 +1419,28 @@ function maybeCloseInfoFromOutside(target) {
   closeInfo();
 }
 
+function maybeClosePanelFromOutside(target) {
+  const panelIsOpen = pOpen || els.panel.classList.contains("open");
+  if (!panelIsOpen) return;
+  if (!target) return;
+  if (els.panelInner?.contains(target)) return;
+  if (els.info.contains(target)) return;
+  if (target === els.infoToggle || els.infoToggle.contains(target)) return;
+  closePanel();
+}
+
+function panelAtBottom() {
+  if (!els.panelBody) return true;
+  const maxScroll = Math.max(0, els.panelBody.scrollHeight - els.panelBody.clientHeight);
+  if (maxScroll <= 2) return true;
+  return els.panelBody.scrollTop >= maxScroll - 2;
+}
+
+function updatePanelNavVisibility() {
+  if (!els.panelNav) return;
+  els.panelNav.classList.toggle("is-visible", panelAtBottom());
+}
+
 window.addEventListener("keydown", (e) => {
   if (e.key !== "Escape") return;
   if (els.info.classList.contains("open")) {
@@ -1352,6 +1448,18 @@ window.addEventListener("keydown", (e) => {
     return;
   }
   if (pOpen || els.panel.classList.contains("open")) closePanel();
+});
+
+window.addEventListener("keydown", (e) => {
+  const panelIsOpen = pOpen || els.panel.classList.contains("open");
+  if (!panelIsOpen) return;
+  if (e.key === "ArrowRight") {
+    e.preventDefault();
+    openRelativePanel(1);
+  } else if (e.key === "ArrowLeft") {
+    e.preventDefault();
+    openRelativePanel(-1);
+  }
 });
 
 // ---- Rotate to a location ---------------------------------------------------
@@ -1562,8 +1670,10 @@ els.zoomOut?.addEventListener("click", () => {
 els.infoToggle.addEventListener("click", toggleInfo);
 els.infoClose.addEventListener("click", closeInfo);
 document.addEventListener("pointerdown", (e) => {
+  maybeClosePanelFromOutside(e.target);
   maybeCloseInfoFromOutside(e.target);
 });
+els.panelBody?.addEventListener("scroll", updatePanelNavVisibility, { passive: true });
 
 // ---- Animation loop ---------------------------------------------------------
 function loop() {
@@ -1591,6 +1701,7 @@ resizeMap();
 window.addEventListener("resize", () => {
   updatePanelInsets();
   resizeGlobe();
+  updatePanelNavVisibility();
   if (pOpen) drawMiniMap(selected);
 });
 window.addEventListener("load", () => {

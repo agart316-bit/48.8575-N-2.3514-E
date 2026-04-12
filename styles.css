@@ -133,17 +133,6 @@ header {
   -webkit-backdrop-filter: blur(10px);
 }
 
-header::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent) 0 56px, var(--muted-light) 56px);
-  opacity: 0.85;
-}
-
 .hl { pointer-events: all; }
 
 h1 {
@@ -225,8 +214,8 @@ h1 .title-dot {
   line-height: 1;
 }
 .info-btn:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: #521e2a;
+  border-color: #521e2a;
   color: #fff;
 }
 
@@ -481,20 +470,30 @@ body.panel-open .fashion-deco {
 
 .pcls {
   position: absolute;
-  top: 14px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 16px;
+  top: 10px;
+  right: 10px;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.12);
+  border: 1px solid var(--panel-line);
+  border-radius: 50%;
+  font-size: 26px;
   color: var(--panel-text);
   cursor: pointer;
-  opacity: 0.46;
-  transition: opacity 0.2s;
+  opacity: 0.82;
+  transition: opacity 0.2s, transform 0.2s, background 0.2s;
   font-family: var(--panel-accent-font), "Cormorant Garamond", serif;
   font-weight: 700;
   z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
-.pcls:hover { opacity: 1; }
+.pcls:hover {
+  opacity: 1;
+  transform: scale(1.04);
+  background: rgba(0, 0, 0, 0.2);
+}
 
 /* ─────────────────────────────────────────────────────────────────────────────
    MAP AREA
@@ -519,7 +518,7 @@ body.panel-open .fashion-deco {
 ───────────────────────────────────────────────────────────────────────────── */
 .pcont {
   flex: 0 0 auto;
-  padding: 24px 28px 30px;
+  padding: 24px 28px 86px;
   position: relative;
   z-index: 1;
   opacity: 0;
@@ -528,6 +527,50 @@ body.panel-open .fashion-deco {
 }
 #panel.open .pcont  { opacity: 1; transform: translateY(0); transition-delay: 1.42s; }
 #panel.closing .pcont { transition-delay: 0s; }
+
+.panel-nav {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  bottom: 10px;
+  z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.panel-nav.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.panel-nav-btn {
+  pointer-events: auto;
+  border: none;
+  background: none;
+  color: var(--panel-text);
+  font-family: var(--panel-accent-font), "Cormorant Garamond", serif;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s, color 0.2s;
+  opacity: 0.82;
+}
+
+.panel-nav-btn:hover {
+  opacity: 1;
+  color: var(--panel-accent);
+}
+
+.panel-nav-btn:active {
+  opacity: 0.7;
+}
 
 .p-inst {
   font-family: var(--panel-accent-font), "Cormorant Garamond", serif;
@@ -775,6 +818,13 @@ body.panel-open .fashion-deco {
   #panel.open #mmap { transition-delay: 0s; }
   #panel.open .pcont { transition-delay: 0s; }
   .pcont { padding: 22px 24px 28px; }
+  .panel-nav {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    margin: 0 20px 18px;
+  }
 
   /* Zoom buttons stay fixed even in stacked layout */
   .zoom-controls { position: fixed; left: var(--page-gutter); bottom: var(--page-gutter); }
@@ -893,7 +943,10 @@ body.panel-open .fashion-deco {
   /* Tall map so content never overflows off-screen */
   .map-area { height: clamp(190px, 54vw, 270px); flex: none; }
 
-  .pcont { padding: 18px 16px 28px; }
+  .pcont { padding: 18px 16px 24px; }
+  .panel-nav {
+    margin: 0 12px 12px;
+  }
 
   /* Enforce minimum 16px everywhere */
   .p-title  { font-size: clamp(22px, 6.5vw, 30px); }
